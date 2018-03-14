@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.mga.knight_rider.LoginActivity">
+
+    <EditText
+        android:id="@+id/userEmail"
+        android:layout_width="286dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text="Email"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="164dp" />
+
+    <EditText
+        android:id="@+id/userPass"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="243dp" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="138dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="LOGIN"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@color/colorWhite"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="320dp" />
+
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="154dp"
+        android:layout_height="23dp"
+        android:text="Don't have an account? "
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="395dp" />
+
+    <TextView
+        android:id="@+id/registerLink"
+        android:layout_width="87dp"
+        android:layout_height="23dp"
+        android:text="Register now."
+        android:textColor="@android:color/holo_blue_dark"
+        tools:layout_editor_absoluteX="203dp"
+        tools:layout_editor_absoluteY="395dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="364dp"
+        android:layout_height="130dp"
+        app:srcCompat="@drawable/kr_logo"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="16dp" />
+</android.support.constraint.ConstraintLayout>

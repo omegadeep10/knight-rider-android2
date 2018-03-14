@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/knightrider.iml" filepath="$PROJECT_DIR$/knightrider.iml" />
+      <module fileurl="file://C:\Users\fire-\Documents\Knight Rider\knight-rider-android2\app\app.iml" filepath="C:\Users\fire-\Documents\Knight Rider\knight-rider-android2\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/knight-rider-android2.iml" filepath="$PROJECT_DIR$/knight-rider-android2.iml" />
+      <module fileurl="file://C:\Users\fire-\Documents\Knight Rider\knight-rider-android2\knightrider.iml" filepath="C:\Users\fire-\Documents\Knight Rider\knight-rider-android2\knightrider.iml" />
     </modules>
   </component>
 </project>
