@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorComponentGrayBG"
+    tools:context="edu.mga.knight_rider.LoginActivity">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_marginTop="120dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="Knight Rider Logo"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/kr_fullcolor_logo2"
+        android:id="@+id/krLogo" />
+
+    <LinearLayout
+        android:id="@+id/usernameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/krLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorWhite"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/loginUsernameLabel"
+            android:labelFor="@+id/loginUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:gravity="center_vertical"
+            android:text="username"
+            android:textSize="14sp"
+            android:textColor="#A9A9A9" />
+
+        <EditText
+            android:id="@+id/loginUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:textSize="14sp"
+            android:ems="10"
+            android:textAlignment="textEnd"
+            android:inputType="textEmailAddress"
+            android:hint="deep.patel@mga.edu" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/passswordContainer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/usernameContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorWhite"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/loginPasswordLabel"
+            android:labelFor="@+id/loginPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:gravity="center_vertical"
+            android:text="password"
+            android:textSize="14sp"
+            android:textColor="#A9A9A9" />
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:textSize="14sp"
+            android:ems="10"
+            android:textAlignment="textEnd"
+            android:inputType="textPassword"
+            android:hint="password" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/forgotPasswordButton"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/passswordContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="12dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/forgotPasswordButtonText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:text="Forgot Password?"
+            android:textSize="14sp"
+            android:textColor="#808080" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/registerButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#808080"
+            android:text="No account? Click here to register." />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/loginButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:text="LOG IN" />
+    </RelativeLayout>
+
+</RelativeLayout>
