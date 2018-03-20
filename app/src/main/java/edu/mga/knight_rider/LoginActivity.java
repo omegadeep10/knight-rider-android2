@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = findViewById(R.id.loginUsername);
         passwordInput = findViewById(R.id.loginPassword);
         loginProgressBar = findViewById(R.id.progressBar);
-        prefs = this.getSharedPreferences("edu.mga.knight_rider", Context.MODE_PRIVATE);
+        prefs = this.getSharedPreferences("edu.mga.knightrider", Context.MODE_PRIVATE);
     }
 
     private Boolean validLoginForm() {
@@ -86,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (result.getHeaders().code() == 200) {
                         String token = result.getResult().get("token").toString();
                         String userId = result.getResult().get("user_id").toString();
-                        prefs.edit().putString("knight-rider-token", token);
-                        prefs.edit().putString("knight-rider-userid", userId);
+                        prefs.edit().putString("knight-rider-token", token).commit();
+                        prefs.edit().putString("knight-rider-userid", userId).commit();
 
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }

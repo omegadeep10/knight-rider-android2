@@ -12,14 +12,11 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity" android:label="Your Rides">
             <intent-filter>
-                <action android:name="edu.mga.knightrider.MainActivity" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".LoginActivity" android:label="Knight Rider">
-            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" android:label="Knight Rider">
         </activity>
     </application>
 
