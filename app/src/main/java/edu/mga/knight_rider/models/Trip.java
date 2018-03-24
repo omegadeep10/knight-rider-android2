@@ -6,8 +6,8 @@ package edu.mga.knight_rider.models;
 
 public class Trip {
     private int id;
-    private int driverId;
-    private String description;
+    private String originAddress;
+    private String originCity;
 
     public int getId() {
         return id;
@@ -17,25 +17,27 @@ public class Trip {
         this.id = id;
     }
 
-    public int getDriverId() {
-        return driverId;
+    public String getOriginAddress() {
+        return originAddress;
     }
 
-    public void setDriverId(int driverId) {
-        this.driverId = driverId;
+    public void setOriginAddress(String originAddress) {
+        this.originAddress = originAddress;
     }
 
-    public String getDescription() {
-        return description;
+    public String getOriginCity() {
+        return originCity;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity;
     }
 
-    public Trip(int id, int driverId, String description) {
+    public Trip(int id, String originAddress, String originCity) {
+
+
         this.id = id;
-        this.driverId = driverId;
-        this.description = description;
+        this.originAddress = originAddress;
+        this.originCity = originCity;
     }
 }

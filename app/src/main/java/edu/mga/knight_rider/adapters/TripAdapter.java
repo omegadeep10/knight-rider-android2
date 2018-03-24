@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.mga.knight_rider.MainActivity;
@@ -18,11 +19,11 @@ import edu.mga.knight_rider.models.Trip;
  * Created by omega on 022, Mar, 22.
  */
 
-public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
+public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     private Context context;
-    private List<Trip> rideList;
+    private ArrayList<Trip> rideList;
 
-    public RideAdapter(Context context, List<Trip> rideList) {
+    public TripAdapter(Context context, ArrayList<Trip> rideList) {
         this.context = context;
         this.rideList = rideList;
     }
@@ -35,7 +36,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.description.setText(rideList.get(position).getDescription());
+        holder.description.setText(rideList.get(position).getOriginCity());
     }
 
     @Override

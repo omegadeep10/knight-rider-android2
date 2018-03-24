@@ -14,30 +14,23 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.Toast;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.Response;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import edu.mga.knight_rider.adapters.RideAdapter;
+import edu.mga.knight_rider.adapters.TripAdapter;
 import edu.mga.knight_rider.models.Trip;
+import edu.mga.knight_rider.models.TripList;
+import edu.mga.knight_rider.network.GetTripDataService;
+import edu.mga.knight_rider.network.RetrofitInstance;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout sidebar;
     private SharedPreferences prefs;
     private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
-    private RideAdapter adapter;
-    private List<Trip> rideList;
+    private TripAdapter adapter;
+    private ArrayList<Trip> rideList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +44,24 @@ public class MainActivity extends AppCompatActivity {
         if (!(prefs.contains("knight-rider-token") && prefs.contains("knight-rider-userid"))) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else {
-            populateRideInformation();
+            GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class);
+
+
+            Call<ArrayList<Trip>> call = service.getTripData("Bearer " + prefs.getString("knight-rider-token", null).replace("\"", ""));
+            Log.wtf("URL Called",  prefs.getString("knight-rider-token", null) + "");
+
+            call.enqueue(new Callback<ArrayList<Trip>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Trip>> call, Response<ArrayList<Trip>> response) {
+                    generateTripList(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "WHOOPS -- :( YOU DIED.", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-
-        Log.d("TOKEN: ", git prefs.getString("knight-rider-token", null));
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new RideAdapter(this, rideList);
-        recyclerView.setAdapter(adapter);
 
         //Initialize and create our toolbar and hamburger menu icon
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -72,30 +73,14 @@ public class MainActivity extends AppCompatActivity {
         sidebar = findViewById(R.id.drawer_layout);
     }
 
-    private void populateRideInformation() {
-        Ion.with(this.getBaseContext())
-                .load("http://knightrider.mgaitec.net:8080/ridesharing/trips")
-                .setHeader("X-Authorization", "Bearer " + prefs.getString("knight-rider-token", null))
-                .asJsonArray()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<JsonArray>>() {
-                    @Override
-                    public void onCompleted(Exception e, Response<JsonArray> result) {
-                        if (e != null) Toast.makeText(getBaseContext(), "Unable to access server. Try again later.", Toast.LENGTH_LONG).show();
-                        if (result.getHeaders().code() != 200) {
-                            Toast.makeText(getBaseContext(), result.toString(), Toast.LENGTH_LONG).show();
-                            return;
-                        }
+    /*Method to generate List of employees using RecyclerView with custom adapter*/
+    private void generateTripList(ArrayList<Trip> rides) {
+        recyclerView = (RecyclerView) findViewById(R.id.rides_container);
+        adapter = new TripAdapter(this, rides);
 
-                        JsonArray allRides = result.getResult();
-                        for (int i = 0; i < allRides.size(); i++) {
-                            JsonObject ride = allRides.get(i).getAsJsonObject();
-                            rideList.add(new Trip(ride.get("id").getAsInt(), ride.get("driverId").getAsInt(), ride.get("originAddress").getAsString() ));
-                        }
-
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     // Override to enable opening sidebar through hamburger menu
