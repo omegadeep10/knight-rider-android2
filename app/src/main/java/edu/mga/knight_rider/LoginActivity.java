@@ -86,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (result.getHeaders().code() == 200) {
                         String token = result.getResult().get("token").toString();
                         String userId = result.getResult().get("user_id").toString();
-                        prefs.edit().putString("knight-rider-token", token).commit();
-                        prefs.edit().putString("knight-rider-userid", userId).commit();
+                        prefs.edit().putString("knight-rider-token", token).apply();
+                        prefs.edit().putString("knight-rider-userid", userId).apply();
 
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }
