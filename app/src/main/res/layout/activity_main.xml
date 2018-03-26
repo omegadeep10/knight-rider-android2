@@ -54,11 +54,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorComponentGrayBG"
-            card_view:cardUseCompatPadding="true"
-            card_view:cardElevation="0dp"
+            android:padding="5dp"
             android:scrollbars="vertical"
-            android:padding="20dp"
-            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+            card_view:cardElevation="0dp"
+            card_view:cardUseCompatPadding="true"
+            tools:listitem="@layout/ride_card">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -71,7 +72,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/menu_items"
-        app:headerLayout="@layout/nav_header"/>
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/menu_items" />
 
 </android.support.v4.widget.DrawerLayout>

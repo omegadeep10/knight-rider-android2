@@ -44,12 +44,10 @@ public class MainActivity extends AppCompatActivity {
         if (!(prefs.contains("knight-rider-token") && prefs.contains("knight-rider-userid"))) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else {
-            GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class);
+            GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
+            Call<ArrayList<Trip>> call = service.getTripData("Bearer " + prefs.getString("knight-rider-token", null)); // Fill our request template
 
-
-            Call<ArrayList<Trip>> call = service.getTripData("Bearer " + prefs.getString("knight-rider-token", null).replace("\"", ""));
-            Log.wtf("URL Called",  prefs.getString("knight-rider-token", null) + "");
-
+            // Make request and setup callback to handle response
             call.enqueue(new Callback<ArrayList<Trip>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Trip>> call, Response<ArrayList<Trip>> response) {
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "WHOOPS -- :( YOU DIED.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -1,30 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardUseCompatPadding="true">
+        card_view:cardElevation="0dp"
+        card_view:cardUseCompatPadding="true"
+        android:background="@color/colorWhite">
 
-        <TextView
-            android:id="@+id/description"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/image"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:textColor="@color/cardview_dark_background"
-            android:text="test"
-            android:textSize="12sp"
-            android:textStyle="normal"
-            android:typeface="sans" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/cardTitle"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/fontBlack"
+                    tools:text="Warner Robins to Macon"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:layout_alignParentLeft="true"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/departureTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:textColor="#808080"
+                    tools:text="February 23 - 11:30 AM"
+                    android:textSize="10sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/cardTitle"
+                    android:textStyle="normal"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/reimbursement"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="18sp"
+                    android:textColor="@color/fontBlack"
+                    android:layout_width="50dp"
+                    android:textAlignment="textEnd"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    tools:text="$48"/>
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#808080"
+                    android:textAlignment="textEnd"
+                    tools:text="Reimbursed"
+                    android:textSize="8sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/reimbursement"
+                    android:textStyle="italic"
+                    android:typeface="sans" />
+
+            </RelativeLayout>
+
+            <!--Being used as a cheap divider between sections-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E8E8E8" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorWhite">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:id="@+id/meetingLocationLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Meeting Location"
+                        android:textSize="8sp"
+                        android:textColor="#808080"/>
+
+                    <TextView
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/meetingLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="PSC Jones Building Lobby"
+                        android:textSize="12sp"
+                        android:paddingTop="2dp"
+                        android:textColor="@color/fontBlack"
+                        android:layout_below="@id/meetingLocationLabel"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:id="@+id/dropoffLocationLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dropoff Location"
+                        android:textSize="8sp"
+                        android:textColor="#808080"/>
+
+                    <TextView
+                        android:id="@+id/dropoffLocation"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Main Building Police Station"
+                        android:textSize="12sp"
+                        android:paddingTop="2dp"
+                        android:textColor="@color/fontBlack"
+                        android:layout_below="@id/dropoffLocationLabel"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Being used as a cheap divider between sections-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E8E8E8" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/testImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@color/colorComponentGrayBG"
+                    app:civ_fill_color="@color/colorComponentGrayBG"
+                    app:civ_circle_background_color="@color/colorComponentGrayBG"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

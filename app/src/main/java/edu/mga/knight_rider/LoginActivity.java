@@ -84,8 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     if (result.getHeaders().code() == 200) {
-                        String token = result.getResult().get("token").toString();
-                        String userId = result.getResult().get("user_id").toString();
+                        // For some reason Ion gets the token and id like so ""<token>"" the replace removes the extra quotes.
+                        String token = result.getResult().get("token").toString().replace("\"", "");
+                        String userId = result.getResult().get("user_id").toString().replace("\"", "");
                         prefs.edit().putString("knight-rider-token", token).apply();
                         prefs.edit().putString("knight-rider-userid", userId).apply();
 

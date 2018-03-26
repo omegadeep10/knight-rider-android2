@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.description.setText(rideList.get(position).getOriginCity());
+        Trip trip = rideList.get(position);
+        SimpleDateFormat dt = new SimpleDateFormat("MMM d - h:m a");
+
+        holder.cardTitle.setText(trip.getOriginCity() + " to " + trip.getDestCity());
+        holder.departureTime.setText(dt.format(trip.getDepartureTime()));
+        holder.meetingLocation.setText(trip.getMeetingLocation());
+        holder.dropoffLocation.setText(trip.getMeetingLocation());
     }
 
     @Override
@@ -45,11 +54,17 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView description;
+        public TextView cardTitle;
+        public TextView departureTime;
+        public TextView meetingLocation;
+        public TextView dropoffLocation;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            description = (TextView) itemView.findViewById(R.id.description);
+            cardTitle = (TextView) itemView.findViewById(R.id.cardTitle);
+            departureTime = (TextView) itemView.findViewById(R.id.departureTime);
+            meetingLocation = (TextView) itemView.findViewById(R.id.meetingLocation);
+            dropoffLocation = (TextView) itemView.findViewById(R.id.dropoffLocation);
         }
     }
 }

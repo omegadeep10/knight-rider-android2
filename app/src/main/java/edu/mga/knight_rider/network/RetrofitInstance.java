@@ -1,5 +1,12 @@
 package edu.mga.knight_rider.network;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 import edu.mga.knight_rider.models.TripList;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,13 +32,18 @@ public class RetrofitInstance {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addInterceptor(logging);
 
+            Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new CustomDateAdapter())
+                .create();
+
             retrofit = new retrofit2.Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
                 .build();
         }
         return retrofit;
     }
 }
+
 
