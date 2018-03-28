@@ -2,6 +2,7 @@ package edu.mga.knight_rider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -13,7 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.View;
+import android.widget.TabHost;
 import android.widget.Toast;
+
+import com.auth0.android.jwt.JWT;
+
 import java.util.ArrayList;
 
 import edu.mga.knight_rider.adapters.TripAdapter;
@@ -31,19 +37,53 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TripAdapter adapter;
     private ArrayList<Trip> rideList;
+    private ArrayList<Trip> shownRideList = new ArrayList<Trip>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getText().toString().equals("Completed")) {
+                    showUpcomingRides(false);
+                }
+                else if (tab.getText().toString().equals("Upcoming")) {
+                    showUpcomingRides(true);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        // Initialize RecyclerView and setup adapter
         recyclerView = (RecyclerView) findViewById(R.id.rides_container);
-        rideList = new ArrayList<>();
+        adapter = new TripAdapter(this, shownRideList);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
         prefs = this.getSharedPreferences("edu.mga.knightrider", Context.MODE_PRIVATE);
 
         if (!(prefs.contains("knight-rider-token") && prefs.contains("knight-rider-userid"))) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else {
+        }
+        else if (new JWT(prefs.getString("knight-rider-token", null).replace("\"", "")).isExpired(0)) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
+        else {
             GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
             Call<ArrayList<Trip>> call = service.getTripData("Bearer " + prefs.getString("knight-rider-token", null)); // Fill our request template
 
@@ -73,12 +113,32 @@ public class MainActivity extends AppCompatActivity {
 
     /*Method to generate List of employees using RecyclerView with custom adapter*/
     private void generateTripList(ArrayList<Trip> rides) {
-        recyclerView = (RecyclerView) findViewById(R.id.rides_container);
-        adapter = new TripAdapter(this, rides);
+        rideList = rides;
+        showUpcomingRides(true);
+    }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+    private void showUpcomingRides(boolean b) {
+        if (b) {
+            shownRideList.clear();
+
+            for (Trip t:rideList) {
+                if (!t.getCompleted()) {
+                    shownRideList.add(t);
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+        } else {
+            shownRideList.clear();
+
+            for (Trip t:rideList) {
+                if (t.getCompleted()) {
+                    shownRideList.add(t);
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+        }
     }
 
     // Override to enable opening sidebar through hamburger menu
