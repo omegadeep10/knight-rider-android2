@@ -9,6 +9,8 @@ import java.util.Date;
 
 /**
  * Created by omega on 025, Mar, 25.
+ *
+ * This is Date adapter so that GSON can parse the Unix time dates
  */
 
 public class CustomDateAdapter extends TypeAdapter<Date> {

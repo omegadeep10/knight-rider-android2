@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,14 +39,16 @@ public class MainActivity extends AppCompatActivity {
     private TripAdapter adapter;
     private ArrayList<Trip> rideList;
     private ArrayList<Trip> shownRideList = new ArrayList<Trip>();
+    private SwipeRefreshLayout swipeLayout;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText().toString().equals("Completed")) {
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
-            Call<ArrayList<Trip>> call = service.getTripData("Bearer " + prefs.getString("knight-rider-token", null)); // Fill our request template
+            Call<ArrayList<Trip>> call = service.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
 
             // Make request and setup callback to handle response
             call.enqueue(new Callback<ArrayList<Trip>>() {
@@ -109,13 +112,49 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         sidebar = findViewById(R.id.drawer_layout);
+
+        swipeLayout = findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+            }
+        });
     }
+
+    private void refreshData() {
+        GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
+        Call<ArrayList<Trip>> call = service.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
+
+        // Make request and setup callback to handle response
+        call.enqueue(new Callback<ArrayList<Trip>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Trip>> call, Response<ArrayList<Trip>> response) {
+                generateTripList(response.body());
+                swipeLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
+                swipeLayout.setRefreshing(false);
+            }
+        });
+    }
+
 
     /*Method to generate List of employees using RecyclerView with custom adapter*/
     private void generateTripList(ArrayList<Trip> rides) {
         rideList = rides;
-        showUpcomingRides(true);
+        int tabIndex = tabLayout.getSelectedTabPosition();
+
+        if (tabIndex == 0) {
+            showUpcomingRides(true);
+        } else {
+            showUpcomingRides(false);
+        }
     }
+
 
     private void showUpcomingRides(boolean b) {
         if (b) {
