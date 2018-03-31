@@ -20,13 +20,13 @@ public class CustomDateAdapter extends TypeAdapter<Date> {
         if (value == null)
             out.nullValue();
         else
-            out.value(value.getTime() / 1000);
+            out.value(value.getTime());
     }
 
     @Override
     public Date read(JsonReader in) throws IOException {
         if (in != null)
-            return new Date(in.nextLong() * 1000);
+            return new Date(in.nextLong());
         else
             return null;
     }

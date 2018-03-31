@@ -48,7 +48,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Trip trip = rideList.get(position);
-        SimpleDateFormat dt = new SimpleDateFormat("MMM d - h:m a");
+        SimpleDateFormat dt = new SimpleDateFormat("MMM dd YYYY - hh:mm a");
         holder.picsWrapper.removeAllViews();
 
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, context.getResources().getDisplayMetrics());

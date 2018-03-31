@@ -12,20 +12,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.view.View;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import edu.mga.knight_rider.adapters.TripAdapter;
 import edu.mga.knight_rider.models.Trip;
-import edu.mga.knight_rider.models.TripList;
 import edu.mga.knight_rider.network.GetTripDataService;
 import edu.mga.knight_rider.network.RetrofitInstance;
 import retrofit2.Call;
@@ -142,9 +140,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    final long now = System.currentTimeMillis();
     /*Method to generate List of employees using RecyclerView with custom adapter*/
     private void generateTripList(ArrayList<Trip> rides) {
+        Collections.sort(rides, new Comparator<Trip>() {
+            @Override
+            public int compare(Trip trip, Trip t1) {
+                long diff1 = Math.abs(trip.getDepartureTime().getTime() - now);
+                long diff2 = Math.abs(t1.getDepartureTime().getTime() - now);
+                return Long.compare(diff1, diff2);
+            }
+        });
+
         rideList = rides;
         int tabIndex = tabLayout.getSelectedTabPosition();
 
