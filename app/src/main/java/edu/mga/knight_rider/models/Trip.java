@@ -1,5 +1,7 @@
 package edu.mga.knight_rider.models;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -33,6 +35,55 @@ public class Trip {
     private Double currentLongitude;
     private Boolean completed;
     private Date completedTimestamp;
+    private Driver driver;
+    private ArrayList<Passenger> passengers;
+
+    public Trip(int id, int carId, int driverId, String originAddress, String originCity, String originState, String originZip, Double originLatitude, Double originLongitude, String destName, String destAddress, String destCity, String destState, String destZip, Double destLatitude, Double destLongitude, Date departureTime, String meetingLocation, Double meetingLatitude, Double meetingLongitude, Integer availableSeats, Integer remainingSeats, Double currentLatitude, Double currentLongitude, Boolean completed, Date completedTimestamp, Driver driver, ArrayList<Passenger> passengers) {
+        this.id = id;
+        this.carId = carId;
+        this.driverId = driverId;
+        this.originAddress = originAddress;
+        this.originCity = originCity;
+        this.originState = originState;
+        this.originZip = originZip;
+        this.originLatitude = originLatitude;
+        this.originLongitude = originLongitude;
+        this.destName = destName;
+        this.destAddress = destAddress;
+        this.destCity = destCity;
+        this.destState = destState;
+        this.destZip = destZip;
+        this.destLatitude = destLatitude;
+        this.destLongitude = destLongitude;
+        this.departureTime = departureTime;
+        this.meetingLocation = meetingLocation;
+        this.meetingLatitude = meetingLatitude;
+        this.meetingLongitude = meetingLongitude;
+        this.availableSeats = availableSeats;
+        this.remainingSeats = remainingSeats;
+        this.currentLatitude = currentLatitude;
+        this.currentLongitude = currentLongitude;
+        this.completed = completed;
+        this.completedTimestamp = completedTimestamp;
+        this.driver = driver;
+        this.passengers = passengers;
+    }
+
+    public ArrayList<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(ArrayList<Passenger> passengers) {
+        this.passengers = passengers;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
 
     public int getId() {
         return id;
@@ -240,35 +291,5 @@ public class Trip {
 
     public void setCompletedTimestamp(Date completedTimestamp) {
         this.completedTimestamp = completedTimestamp;
-    }
-
-    public Trip(int id, int carId, int driverId, String originAddress, String originCity, String originState, String originZip, Double originLatitude, Double originLongitude, String destName, String destAddress, String destCity, String destState, String destZip, Double destLatitude, Double destLongitude, Date departureTime, String meetingLocation, Double meetingLatitude, Double meetingLongitude, Integer availableSeats, Integer remainingSeats, Double currentLatitude, Double currentLongitude, Boolean completed, Date completedTimestamp) {
-        this.id = id;
-        this.carId = carId;
-        this.driverId = driverId;
-        this.originAddress = originAddress;
-        this.originCity = originCity;
-        this.originState = originState;
-        this.originZip = originZip;
-        this.originLatitude = originLatitude;
-        this.originLongitude = originLongitude;
-        this.destName = destName;
-        this.destAddress = destAddress;
-        this.destCity = destCity;
-        this.destState = destState;
-        this.destZip = destZip;
-        this.destLatitude = destLatitude;
-        this.destLongitude = destLongitude;
-        this.departureTime = departureTime;
-        this.meetingLocation = meetingLocation;
-        this.meetingLatitude = meetingLatitude;
-        this.meetingLongitude = meetingLongitude;
-        this.availableSeats = availableSeats;
-        this.remainingSeats = remainingSeats;
-        this.currentLatitude = currentLatitude;
-        this.currentLongitude = currentLongitude;
-        this.completed = completed;
-        this.completedTimestamp = completedTimestamp;
-
     }
 }

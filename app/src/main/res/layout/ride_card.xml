@@ -155,21 +155,25 @@
                 android:background="#E8E8E8" />
             
             <LinearLayout
+                android:id="@+id/pics_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="10dp"
                 android:paddingRight="15dp"
+                android:orientation="horizontal"
                 android:paddingBottom="10dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/testImage"
+                <!--<de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/driver_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@color/colorComponentGrayBG"
                     app:civ_fill_color="@color/colorComponentGrayBG"
                     app:civ_circle_background_color="@color/colorComponentGrayBG"
-                    />
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_width="2dp"
+                    />-->
             </LinearLayout>
 
         </LinearLayout>
