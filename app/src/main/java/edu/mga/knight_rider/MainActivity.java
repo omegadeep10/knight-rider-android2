@@ -187,6 +187,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void getMessages() {
+        /*To-do: Jump to activity that allows users to view messages*/
+    }
+
+    public void editTrip() {
+        /*To-do: Jump to the activity that allows users to edit existing rides*/
+    }
+
+    public void leaveTrip() {
+        /* To-do: Implement leave ride functionality - account for permissions */
+    }
+
+    public void deleteTrip() {
+        /* To-do: Implement delete ride functionality */
+    }
+
     // Override to enable opening sidebar through hamburger menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

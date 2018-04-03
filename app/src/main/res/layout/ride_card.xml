@@ -164,7 +164,7 @@
                 android:orientation="horizontal"
                 android:paddingBottom="10dp">
 
-                <!--<de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/driver_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -173,8 +173,44 @@
                     app:civ_circle_background_color="@color/colorComponentGrayBG"
                     app:civ_border_color="@color/colorPrimary"
                     app:civ_border_width="2dp"
-                    />-->
+                    />
             </LinearLayout>
+
+            <!--Being used as a cheap divider between sections-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E8E8E8" />
+
+            <LinearLayout
+                android:id="@+id/actions_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="7dp"
+                android:orientation="horizontal">
+
+                <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:text="MESSAGES"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="10dp"
+                    android:onClick="getMessages"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:text="MESSAGES"
+                    android:textColor="#A9A9A9"
+                    android:textSize="10dp"
+                    android:onClick="getMessages"
+                    android:layout_marginRight="10dp"/>-->
+            </LinearLayout>
+
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
