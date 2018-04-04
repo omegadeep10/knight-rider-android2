@@ -130,7 +130,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         // Add messages btn to every card
         TextView messages = new TextView(context);
         messages.setText("MESSAGES");
-        messages.setTextSize(10);
+        messages.setTextSize(12);
         messages.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         messages.setTypeface(null, Typeface.BOLD);
         messages.setLayoutParams(params);
@@ -150,7 +150,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             // SHOW DELETE, EDIT
             TextView delete = new TextView(context);
             delete.setText("DELETE");
-            delete.setTextSize(10);
+            delete.setTextSize(12);
             delete.setTextColor(Color.parseColor("#A9A9A9"));
             delete.setTypeface(null, Typeface.BOLD);
             delete.setLayoutParams(params);
@@ -170,7 +170,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             if (!currentTrip.getCompleted()) {
                 TextView edit = new TextView(context);
                 edit.setText("EDIT");
-                edit.setTextSize(10);
+                edit.setTextSize(12);
                 edit.setTextColor(Color.parseColor("#A9A9A9"));
                 edit.setTypeface(null, Typeface.BOLD);
                 edit.setLayoutParams(params);
@@ -191,7 +191,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             // SHOW LEAVE
             TextView leave = new TextView(context);
             leave.setText("LEAVE");
-            leave.setTextSize(10);
+            leave.setTextSize(12);
             leave.setTextColor(Color.parseColor("#A9A9A9"));
             leave.setTypeface(null, Typeface.BOLD);
             leave.setLayoutParams(params);
