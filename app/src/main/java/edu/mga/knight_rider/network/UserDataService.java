@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 
-public interface GetUserDataService {
+public interface UserDataService {
     @GET("users/{userid}")
     Call<User> getUser(@Header("X-Authorization") String token, @Path("userid") String userid);
 }

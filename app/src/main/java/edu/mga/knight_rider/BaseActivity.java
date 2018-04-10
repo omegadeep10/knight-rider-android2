@@ -2,27 +2,16 @@ package edu.mga.knight_rider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.mga.knight_rider.models.Trip;
 import edu.mga.knight_rider.models.User;
-import edu.mga.knight_rider.network.GetTripDataService;
-import edu.mga.knight_rider.network.GetUserDataService;
+import edu.mga.knight_rider.network.UserDataService;
 import edu.mga.knight_rider.network.RetrofitInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
         // R.id.drawer_layout should be in every activity with exactly the same id.
         sidebar = findViewById(R.id.drawer_layout);
 
-        GetUserDataService service = RetrofitInstance.getRetrofitInstance().create(GetUserDataService.class); // Instantiate our service
+        UserDataService service = RetrofitInstance.getRetrofitInstance().create(UserDataService.class); // Instantiate our service
         Call<User> call = service.getUser("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
 
         // Make request and setup callback to handle response

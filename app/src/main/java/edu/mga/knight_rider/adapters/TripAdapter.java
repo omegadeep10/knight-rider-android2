@@ -121,7 +121,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     private void generateButtons(ViewHolder holder, int cardPos) {
         int userId = Integer.parseInt(prefs.getString("knight-rider-userid", "-1"));
-        Trip currentTrip = rideList.get(cardPos);
+        final Trip currentTrip = rideList.get(cardPos);
         holder.actionsWrapper.removeAllViews();
 
         // Init shared params object
@@ -159,7 +159,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if(context instanceof MainActivity){
-                        ((MainActivity) context).deleteTrip();
+                        ((MainActivity) context).deleteTrip(currentTrip.getId());
                     }
                 }
             });

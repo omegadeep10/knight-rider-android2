@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +22,9 @@ import java.util.Comparator;
 
 import edu.mga.knight_rider.adapters.TripAdapter;
 import edu.mga.knight_rider.models.Trip;
-import edu.mga.knight_rider.network.GetTripDataService;
+import edu.mga.knight_rider.network.TripDataService;
 import edu.mga.knight_rider.network.RetrofitInstance;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +37,7 @@ public class MainActivity extends BaseActivity {
     private ArrayList<Trip> shownRideList = new ArrayList<Trip>();
     private SwipeRefreshLayout swipeLayout;
     private TabLayout tabLayout;
+    private TripDataService tripService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         super.onCreateDrawer();
 
+        tripService = RetrofitInstance.getRetrofitInstance().create(TripDataService.class); // Instantiate our service
+        
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -85,8 +87,7 @@ public class MainActivity extends BaseActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         else {
-            GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
-            Call<ArrayList<Trip>> call = service.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
+            Call<ArrayList<Trip>> call = tripService.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
 
             // Make request and setup callback to handle response
             call.enqueue(new Callback<ArrayList<Trip>>() {
@@ -119,8 +120,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void refreshData() {
-        GetTripDataService service = RetrofitInstance.getRetrofitInstance().create(GetTripDataService.class); // Instantiate our service
-        Call<ArrayList<Trip>> call = service.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
+        Call<ArrayList<Trip>> call = tripService.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
 
         // Make request and setup callback to handle response
         call.enqueue(new Callback<ArrayList<Trip>>() {
@@ -197,8 +197,24 @@ public class MainActivity extends BaseActivity {
         /* To-do: Implement leave ride functionality - account for permissions */
     }
 
-    public void deleteTrip() {
-        /* To-do: Implement delete ride functionality */
+    public void deleteTrip(int tripId) {
+        Call<ResponseBody> call = tripService.deleteTrip("Bearer " + prefs.getString("knight-rider-token",null), tripId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() > 204) {
+                    Toast.makeText(MainActivity.this, "Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Trip successfully deleted.", Toast.LENGTH_SHORT).show();
+                    refreshData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete trip.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Override to enable opening sidebar through hamburger menu
