@@ -2,6 +2,7 @@ package edu.mga.knight_rider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
@@ -197,24 +199,31 @@ public class MainActivity extends BaseActivity {
         /* To-do: Implement leave ride functionality - account for permissions */
     }
 
-    public void deleteTrip(int tripId) {
-        Call<ResponseBody> call = tripService.deleteTrip("Bearer " + prefs.getString("knight-rider-token",null), tripId);
-        call.enqueue(new Callback<ResponseBody>() {
+    public void deleteTrip(final int tripId) {
+        Snackbar snackbar = Snackbar.make(this.recyclerView, "Delete the trip with the id " + tripId + "?", Snackbar.LENGTH_INDEFINITE).setAction("YES", new View.OnClickListener() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.code() > 204) {
-                    Toast.makeText(MainActivity.this, "Failed to delete trip.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Trip successfully deleted.", Toast.LENGTH_SHORT).show();
-                    refreshData();
-                }
-            }
+            public void onClick(View view) {
+                Call<ResponseBody> call = tripService.deleteTrip("Bearer " + prefs.getString("knight-rider-token",null), tripId);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() > 204) {
+                            Toast.makeText(MainActivity.this, "Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Trip successfully deleted.", Toast.LENGTH_SHORT).show();
+                            refreshData();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
+        snackbar.show();
     }
 
     // Override to enable opening sidebar through hamburger menu
