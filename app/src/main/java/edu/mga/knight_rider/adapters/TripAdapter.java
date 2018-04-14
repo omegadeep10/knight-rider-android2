@@ -139,7 +139,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 if(context instanceof MainActivity){
-                    ((MainActivity) context).getMessages();
+                    ((MainActivity) context).getMessages(currentTrip.getId());
                 }
             }
         });

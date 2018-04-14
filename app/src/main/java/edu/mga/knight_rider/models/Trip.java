@@ -37,8 +37,17 @@ public class Trip {
     private Date completedTimestamp;
     private Driver driver;
     private ArrayList<Passenger> passengers;
+    private ArrayList<Message> messages;
 
-    public Trip(int id, int carId, int driverId, String originAddress, String originCity, String originState, String originZip, Double originLatitude, Double originLongitude, String destName, String destAddress, String destCity, String destState, String destZip, Double destLatitude, Double destLongitude, Date departureTime, String meetingLocation, Double meetingLatitude, Double meetingLongitude, Integer availableSeats, Integer remainingSeats, Double currentLatitude, Double currentLongitude, Boolean completed, Date completedTimestamp, Driver driver, ArrayList<Passenger> passengers) {
+    public ArrayList<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Trip(int id, int carId, int driverId, String originAddress, String originCity, String originState, String originZip, Double originLatitude, Double originLongitude, String destName, String destAddress, String destCity, String destState, String destZip, Double destLatitude, Double destLongitude, Date departureTime, String meetingLocation, Double meetingLatitude, Double meetingLongitude, Integer availableSeats, Integer remainingSeats, Double currentLatitude, Double currentLongitude, Boolean completed, Date completedTimestamp, Driver driver, ArrayList<Passenger> passengers, ArrayList<Message> messages) {
         this.id = id;
         this.carId = carId;
         this.driverId = driverId;
@@ -67,6 +76,7 @@ public class Trip {
         this.completedTimestamp = completedTimestamp;
         this.driver = driver;
         this.passengers = passengers;
+        this.messages = messages;
     }
 
     public ArrayList<Passenger> getPassengers() {

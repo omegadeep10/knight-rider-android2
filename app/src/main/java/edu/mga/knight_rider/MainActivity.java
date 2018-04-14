@@ -187,8 +187,10 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void getMessages() {
-        /*To-do: Jump to activity that allows users to view messages*/
+    public void getMessages(int tripId) {
+        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+        intent.putExtra("tripId", tripId);
+        startActivity(intent);
     }
 
     public void editTrip() {
