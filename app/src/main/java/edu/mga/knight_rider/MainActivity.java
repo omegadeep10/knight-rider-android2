@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity {
     private SharedPreferences prefs;
     private RecyclerView recyclerView;
     private TripAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Trip> rideList;
     private ArrayList<Trip> shownRideList = new ArrayList<Trip>();
     private SwipeRefreshLayout swipeLayout;
@@ -43,6 +44,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle("Your Rides");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         super.onCreateDrawer();
@@ -76,7 +78,7 @@ public class MainActivity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.rides_container);
         adapter = new TripAdapter(this, shownRideList);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -113,6 +115,7 @@ public class MainActivity extends BaseActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         swipeLayout = findViewById(R.id.swipe_container);
+        swipeLayout.setDistanceToTriggerSync(200);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

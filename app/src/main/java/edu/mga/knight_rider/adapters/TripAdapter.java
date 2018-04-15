@@ -4,24 +4,24 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.annotation.Nullable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.mga.knight_rider.MainActivity;
@@ -44,8 +44,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         this.prefs = context.getSharedPreferences("edu.mga.knightrider", Context.MODE_PRIVATE); // Need prefs to get user-id, which is used to determine if to show leave vs delete/edit
     }
 
-
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ride_card, parent, false);
@@ -56,9 +54,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         generateButtons(holder, position); // Generates MESSAGES LEAVE EDIT buttons as necessary
         Trip trip = rideList.get(position);
-        SimpleDateFormat dt = new SimpleDateFormat("MMM dd YYYY - hh:mm a");
+        SimpleDateFormat dt = new SimpleDateFormat("MMM dd YYYY - hh:mm a", Locale.US);
+        SimpleDateFormat dt2 = new SimpleDateFormat("hh:mm a", Locale.US);
+        dt2.setTimeZone(TimeZone.getDefault());
         dt.setTimeZone(TimeZone.getDefault());
         holder.picsWrapper.removeAllViews();
+
+        Date currentDate = new Date();
+
+        holder.bannerWrapper.setVisibility(View.GONE);
+        if ((trip.getDepartureTime().getTime() - currentDate.getTime()) > 0 && (trip.getDepartureTime().getTime() - currentDate.getTime()) < TimeUnit.DAYS.toMillis(1)) {
+            holder.bannerWrapper.setVisibility(View.VISIBLE);
+            holder.bannerText.setText("Meet at the " + trip.getMeetingLocation() + " at " + dt2.format(trip.getDepartureTime()));
+        }
 
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, context.getResources().getDisplayMetrics());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(height, height);
@@ -66,8 +74,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
 
         CircleImageView driverPic = new CircleImageView(context);
-        driverPic.setCircleBackgroundColor(context.getResources().getColor(R.color.colorComponentGrayBG));
-        driverPic.setBorderColor(context.getResources().getColor(R.color.colorPrimary));
+        driverPic.setCircleBackgroundColor(getColorWrapper(context, R.color.colorComponentGrayBG));
+        driverPic.setBorderColor(getColorWrapper(context, R.color.colorPrimary));
         driverPic.setBorderWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, context.getResources().getDisplayMetrics()));
         driverPic.setLayoutParams(params);
 
@@ -79,7 +87,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
         for (Passenger p: trip.getPassengers()) {
             CircleImageView passengerPic = new CircleImageView(context);
-            passengerPic.setCircleBackgroundColor(context.getResources().getColor(R.color.colorComponentGrayBG));
+            passengerPic.setCircleBackgroundColor(getColorWrapper(context, R.color.colorComponentGrayBG));
             passengerPic.setLayoutParams(params);
 
             Glide.with(context)
@@ -107,6 +115,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         public TextView dropoffLocation;
         public LinearLayout picsWrapper;
         public LinearLayout actionsWrapper;
+        public RelativeLayout bannerWrapper;
+        public TextView bannerText;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -116,6 +126,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             dropoffLocation = (TextView) itemView.findViewById(R.id.dropoffLocation);
             picsWrapper = (LinearLayout) itemView.findViewById(R.id.pics_wrapper);
             actionsWrapper = (LinearLayout) itemView.findViewById(R.id.actions_wrapper);
+            bannerWrapper = (RelativeLayout) itemView.findViewById(R.id.banner_wrapper);
+            bannerText = (TextView) itemView.findViewById(R.id.banner_text);
         }
     }
 
@@ -131,7 +143,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         TextView messages = new TextView(context);
         messages.setText("MESSAGES");
         messages.setTextSize(12);
-        messages.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        messages.setTextColor(getColorWrapper(context, R.color.colorPrimary));
         messages.setTypeface(null, Typeface.BOLD);
         messages.setLayoutParams(params);
         messages.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
@@ -206,6 +218,18 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             });
 
             holder.actionsWrapper.addView(leave);
+        }
+    }
+
+
+    // Wrapper since apparently getColor was deprecated on getResources starting v23 or something. This is a wrapper function that calls the correct one based on SDK version
+    @SuppressWarnings("deprecation")
+    public static int getColorWrapper(Context context, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getColor(id);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getColor(id);
         }
     }
 }

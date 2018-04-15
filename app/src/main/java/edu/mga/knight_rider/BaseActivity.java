@@ -27,26 +27,30 @@ public class BaseActivity extends AppCompatActivity {
         // R.id.drawer_layout should be in every activity with exactly the same id.
         sidebar = findViewById(R.id.drawer_layout);
 
-        UserDataService service = RetrofitInstance.getRetrofitInstance().create(UserDataService.class); // Instantiate our service
-        Call<User> call = service.getUser("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
+        // Checks to see if token exists before attempting to access data => IMPORTANT (Since initially, main activity loads, then redirects to login)
+        if (!prefs.getString("knight-rider-token", "").isEmpty()) {
+            UserDataService service = RetrofitInstance.getRetrofitInstance().create(UserDataService.class); // Instantiate our service
+            Call<User> call = service.getUser("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
 
-        // Make request and setup callback to handle response
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
-                    User currentUser = response.body();
-                    showUser(currentUser);
-                } else {
-                    Toast.makeText(BaseActivity.this, "Network request failed to obtain user data.", Toast.LENGTH_SHORT).show();
+            // Make request and setup callback to handle response
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.code() == 200) {
+                        User currentUser = response.body();
+                        showUser(currentUser);
+                    } else {
+                        Toast.makeText(BaseActivity.this, "Network request failed to obtain user data.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(BaseActivity.this, "Unable to load profile information.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Toast.makeText(BaseActivity.this, "Unable to load profile information.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     private void showUser(User currentUser) {
