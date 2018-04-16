@@ -200,12 +200,37 @@ public class MainActivity extends BaseActivity {
         /*To-do: Jump to the activity that allows users to edit existing rides*/
     }
 
-    public void leaveTrip() {
-        /* To-do: Implement leave ride functionality - account for permissions */
+    public void leaveTrip(final int tripId) {
+        final String userId = prefs.getString("knight-rider-userid", null);
+
+        Snackbar snackbar = Snackbar.make(this.recyclerView, "Are you sure you want to leave this ride?", Snackbar.LENGTH_INDEFINITE).setAction("YES", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<ResponseBody> call = tripService.leaveTrip("Bearer " + prefs.getString("knight-rider-token",null), tripId, userId);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.code() > 204) {
+                            Toast.makeText(MainActivity.this, "Failed to leave the ride.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Successfully left ride.", Toast.LENGTH_SHORT).show();
+                            refreshData();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to leave the ride.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        snackbar.show();
     }
 
     public void deleteTrip(final int tripId) {
-        Snackbar snackbar = Snackbar.make(this.recyclerView, "Delete the trip with the id " + tripId + "?", Snackbar.LENGTH_INDEFINITE).setAction("YES", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(this.recyclerView, "Delete the ride with the id " + tripId + "?", Snackbar.LENGTH_INDEFINITE).setAction("YES", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Call<ResponseBody> call = tripService.deleteTrip("Bearer " + prefs.getString("knight-rider-token",null), tripId);
@@ -213,16 +238,16 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code() > 204) {
-                            Toast.makeText(MainActivity.this, "Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Failed to delete the ride.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "Trip successfully deleted.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Ride successfully deleted.", Toast.LENGTH_SHORT).show();
                             refreshData();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete trip.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete the ride.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

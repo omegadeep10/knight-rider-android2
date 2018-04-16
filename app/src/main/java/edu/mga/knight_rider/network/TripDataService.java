@@ -19,4 +19,7 @@ public interface TripDataService {
 
     @DELETE("trips/{tripid}")
     Call<ResponseBody> deleteTrip(@Header("X-Authorization") String token, @Path("tripid") int tripid);
+
+    @DELETE("trips/{tripid}/{userid}")
+    Call<ResponseBody> leaveTrip(@Header("X-Authorization") String token, @Path("tripid") int tripid, @Path("userid") String userid);
 }

@@ -212,7 +212,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if(context instanceof MainActivity){
-                        ((MainActivity) context).leaveTrip();
+                        ((MainActivity) context).leaveTrip(currentTrip.getId());
                     }
                 }
             });
