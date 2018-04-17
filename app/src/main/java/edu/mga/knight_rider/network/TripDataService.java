@@ -14,6 +14,9 @@ public interface TripDataService {
     @GET("trips")
     Call<ArrayList<Trip>> getAllTrips(@Header("X-Authorization") String token);
 
+    @GET("trips/{tripid}")
+    Call<Trip> getTrip(@Header("X-Authorization") String token, @Path("tripid") int tripid);
+
     @GET("users/{userid}/trips")
     Call<ArrayList<Trip>> getUserTrips(@Header("X-Authorization") String token, @Path("userid") String userid);
 

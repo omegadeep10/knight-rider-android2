@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@color/colorComponentGrayBG"
+            app:civ_fill_color="@color/colorComponentGrayBG"
+            app:civ_circle_background_color="@color/colorComponentGrayBG" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:paddingTop="2dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Deep Patel"
+                    android:textSize="11dp"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/fontBlack"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="04/12/2018 12:30 PM"
+                    android:textSize="11dp"
+                    android:layout_marginBottom="3dp"
+                    />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/chat_messsage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="This is my test message while developing the chat application."
+                android:textSize="11dp"
+                android:textColor="@color/fontBlack"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
