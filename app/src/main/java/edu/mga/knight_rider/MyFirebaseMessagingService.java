@@ -1,4 +1,6 @@
 package edu.mga.knight_rider;
 
-class MyFirebaseMessagingService {
+import android.app.Service;
+
+public class MyFirebaseMessagingService extends Service {
 }
