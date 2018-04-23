@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
         TextView profileEmail = (TextView) findViewById(R.id.profile_email);
 
         Glide.with(this)
-                .load(currentUser.getProfilePicture())
+                .load(currentUser.getProfilePicture() == null ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943" : currentUser.getProfilePicture())
                 .into(profilePic);
 
         profileName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
