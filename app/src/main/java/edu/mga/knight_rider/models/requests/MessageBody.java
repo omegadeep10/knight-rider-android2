@@ -2,8 +2,8 @@ package edu.mga.knight_rider.models.requests;
 
 public class MessageBody {
     private String comment;
-    private String tripId;
-    private String userId;
+    private Integer tripId;
+    private Integer userId;
 
     public String getComment() {
         return comment;
@@ -13,23 +13,23 @@ public class MessageBody {
         this.comment = comment;
     }
 
-    public String getTripId() {
+    public Integer getTripId() {
         return tripId;
     }
 
-    public void setTripId(String tripId) {
+    public void setTripId(Integer tripId) {
         this.tripId = tripId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public MessageBody(String comment, String tripId, String userId) {
+    public MessageBody(String comment, Integer tripId, Integer userId) {
 
         this.comment = comment;
         this.tripId = tripId;
