@@ -63,8 +63,10 @@
                 android:background="@color/colorComponentGrayBG"
                 android:paddingTop="6dp"
                 android:paddingBottom="10dp"
+                android:layout_weight="1"
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
+                android:layout_marginBottom="50dp"
                 android:clipToPadding="false"
                 android:scrollbars="vertical"
                 app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
@@ -73,6 +75,34 @@
                 tools:listitem="@layout/ride_card">
 
             </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@color/colorPrimary"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+                
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Find Ride"
+                    android:textSize="11dp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:background="@android:color/transparent"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:text="Create Ride"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorWhite"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
 
         </android.support.design.widget.CoordinatorLayout>
 

@@ -1,6 +1,7 @@
 package edu.mga.knight_rider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,19 @@ public class BaseActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                Toast.makeText(this, "Ooops, not implemented yet.", Toast.LENGTH_SHORT).show();
+                return true;
+        }
     }
 
     private void showUser(User currentUser) {
