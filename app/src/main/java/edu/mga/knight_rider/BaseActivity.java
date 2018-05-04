@@ -1,6 +1,7 @@
 package edu.mga.knight_rider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -54,13 +55,26 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                Toast.makeText(this, "Ooops, not implemented yet.", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+    }
+
     private void showUser(User currentUser) {
         CircleImageView profilePic = (CircleImageView) findViewById(R.id.profile_pic);
         TextView profileName = (TextView) findViewById(R.id.profile_name);
         TextView profileEmail = (TextView) findViewById(R.id.profile_email);
 
         Glide.with(this)
-                .load(currentUser.getProfilePicture())
+                .load(currentUser.getProfilePicture() == null ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943" : currentUser.getProfilePicture())
                 .into(profilePic);
 
         profileName.setText(currentUser.getFirstName() + " " + currentUser.getLastName());

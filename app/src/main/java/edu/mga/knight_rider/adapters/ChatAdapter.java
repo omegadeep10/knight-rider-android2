@@ -58,7 +58,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         dt.setTimeZone(TimeZone.getDefault());
 
         Glide.with(context)
-                .load(currentMessage.getProfilePicture())
+                .load(currentMessage.getProfilePicture() == null ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943" : currentMessage.getProfilePicture())
                 .into(holder.profilePic);
 
         holder.fullName.setText(currentMessage.getFirstName() + " " + currentMessage.getLastName());

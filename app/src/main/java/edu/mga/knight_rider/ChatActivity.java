@@ -14,8 +14,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
+import edu.mga.knight_rider.models.requests.MessageBody;
 import com.auth0.android.jwt.JWT;
 
 import java.util.ArrayList;
@@ -26,11 +30,14 @@ import edu.mga.knight_rider.adapters.ChatAdapter;
 import edu.mga.knight_rider.adapters.TripAdapter;
 import edu.mga.knight_rider.models.Message;
 import edu.mga.knight_rider.models.Trip;
+import edu.mga.knight_rider.network.MessageDataService;
 import edu.mga.knight_rider.network.RetrofitInstance;
 import edu.mga.knight_rider.network.TripDataService;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class ChatActivity extends BaseActivity {
     private SharedPreferences prefs;
@@ -39,8 +46,12 @@ public class ChatActivity extends BaseActivity {
     private ChatAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private TripDataService tripService;
+    private MessageDataService messageService;
     private ArrayList<Message> messageList = new ArrayList<Message>();
     private int tripId;
+    private EditText messageInput;
+    private RelativeLayout progressBarWrapper;
+    private Button sendMessageButton;
     final long now = System.currentTimeMillis();
 
     @Override
@@ -54,6 +65,7 @@ public class ChatActivity extends BaseActivity {
 
         prefs = this.getSharedPreferences("edu.mga.knightrider", Context.MODE_PRIVATE);
         tripService = RetrofitInstance.getRetrofitInstance().create(TripDataService.class); // Instantiate our service
+        messageService = RetrofitInstance.getRetrofitInstance().create(MessageDataService.class);
 
         //Initialize and create our toolbar and hamburger menu icon
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -80,6 +92,10 @@ public class ChatActivity extends BaseActivity {
             }
         });
 
+        messageInput = findViewById(R.id.message_input);
+        progressBarWrapper = findViewById(R.id.progressBarWrapper);
+        sendMessageButton = findViewById(R.id.sendButton);
+
         refreshData();
     }
 
@@ -100,6 +116,38 @@ public class ChatActivity extends BaseActivity {
                 swipeLayout.setRefreshing(false);
             }
         });
+    }
+
+    public void sendMessage(View view) {
+        String message = messageInput.getText().toString();
+
+        if (message.isEmpty()) {
+            Toast.makeText(this, "Empty message", Toast.LENGTH_SHORT).show();
+        } else {
+            sendMessageButton.setVisibility(View.GONE);
+            progressBarWrapper.setVisibility(View.VISIBLE);
+            Integer userId = Integer.parseInt(prefs.getString("knight-rider-userid", null));
+
+            MessageBody body = new MessageBody(message, tripId, userId);
+            Call<ResponseBody> call = messageService.createMessage("Bearer " + prefs.getString("knight-rider-token", null), tripId, userId, body);
+
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    sendMessageButton.setVisibility(View.VISIBLE);
+                    progressBarWrapper.setVisibility(View.GONE);
+                    refreshData();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(ChatActivity.this, "Unidentified error occurred", Toast.LENGTH_SHORT).show();
+                    sendMessageButton.setVisibility(View.VISIBLE);
+                    progressBarWrapper.setVisibility(View.GONE);
+                    refreshData();
+                }
+            });
+        }
     }
 
     private void generateMessageList(Trip ride) {

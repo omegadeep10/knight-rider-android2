@@ -80,7 +80,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         driverPic.setLayoutParams(params);
 
         Glide.with(context)
-            .load(trip.getDriver().getProfilePicture())
+            .load(trip.getDriver().getProfilePicture() == null ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943" : trip.getDriver().getProfilePicture())
             .into(driverPic);
 
         holder.picsWrapper.addView(driverPic);
@@ -91,7 +91,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             passengerPic.setLayoutParams(params);
 
             Glide.with(context)
-                .load(p.getProfilePicture())
+                .load(p.getProfilePicture() == null ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943" : p.getProfilePicture())
                 .into(passengerPic);
 
             holder.picsWrapper.addView(passengerPic);
