@@ -157,7 +157,7 @@ public class ChatActivity extends BaseActivity {
             public int compare(Message message, Message m1) {
                 long diff1 = Math.abs(message.getLogDate().getTime() - now);
                 long diff2 = Math.abs(m1.getLogDate().getTime() - now);
-                return Long.compare(diff1, diff2);
+                return Long.compare(diff2, diff1);
             }
         });
 

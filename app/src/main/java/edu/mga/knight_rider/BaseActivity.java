@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,9 +58,15 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("MENU", Integer.toString(item.getItemId()));
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                Intent intent = new Intent(BaseActivity.this, MainActivity.class);
+                intent = new Intent(BaseActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.nav_find_rides:
+                intent = new Intent(BaseActivity.this, FindRideActivity.class);
                 startActivity(intent);
                 return true;
             default:

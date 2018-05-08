@@ -200,24 +200,54 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             }
 
         } else {
-            // SHOW LEAVE
-            TextView leave = new TextView(context);
-            leave.setText("LEAVE");
-            leave.setTextSize(12);
-            leave.setTextColor(Color.parseColor("#A9A9A9"));
-            leave.setTypeface(null, Typeface.BOLD);
-            leave.setLayoutParams(params);
-            leave.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
-            leave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(context instanceof MainActivity){
-                        ((MainActivity) context).leaveTrip(currentTrip.getId());
-                    }
+            Boolean isPassenger = false;
+            for (Passenger p:currentTrip.getPassengers()) {
+                if (p.getId() == userId) {
+                    isPassenger = true;
                 }
-            });
+            }
 
-            holder.actionsWrapper.addView(leave);
+            if (isPassenger) {
+                // SHOW LEAVE
+                TextView leave = new TextView(context);
+                leave.setText("LEAVE");
+                leave.setTextSize(12);
+                leave.setTextColor(Color.parseColor("#A9A9A9"));
+                leave.setTypeface(null, Typeface.BOLD);
+                leave.setLayoutParams(params);
+                leave.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
+                leave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(context instanceof MainActivity){
+                            ((MainActivity) context).leaveTrip(currentTrip.getId());
+                        }
+                    }
+                });
+
+                holder.actionsWrapper.addView(leave);
+            }
+
+            if (!isPassenger) {
+                // SHOW JOIN
+                TextView leave = new TextView(context);
+                leave.setText("JOIN");
+                leave.setTextSize(12);
+                leave.setTextColor(Color.parseColor("#A9A9A9"));
+                leave.setTypeface(null, Typeface.BOLD);
+                leave.setLayoutParams(params);
+                leave.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
+                leave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(context instanceof MainActivity){
+                            ((MainActivity) context).leaveTrip(currentTrip.getId());
+                        }
+                    }
+                });
+
+                holder.actionsWrapper.addView(leave);
+            }
         }
     }
 

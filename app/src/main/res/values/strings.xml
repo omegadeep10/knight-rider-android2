@@ -2,4 +2,11 @@
     <string name="app_name">Knight Rider</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="empty_profile_pic">https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBlv5RzA3udThbSqdYWNkVkL2GDMWdwHB47qKzaTfOhYm-943</string>
+    <string-array name="find_ride_choices_array">
+        <item>Macon</item>
+        <item>Dublin</item>
+        <item>Warner Robins</item>
+        <item>Cochran</item>
+        <item>Eastman</item>
+    </string-array>
 </resources>

@@ -16,11 +16,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -33,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class FindRideActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SharedPreferences prefs;
     private RecyclerView recyclerView;
     private TripAdapter adapter;
@@ -44,58 +48,51 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private TabLayout tabLayout;
     private TripDataService tripService;
     private NavigationView navView;
+    private Spinner locationStart;
+    private Spinner locationEnd;
+    private String locationStartValue = "";
+    private String locationEndValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTitle("Your Rides");
+        setTitle("Find Rides");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_find_ride);
         super.onCreateDrawer();
 
+        locationStart = (Spinner) findViewById(R.id.location_start_spinner);
+        ArrayAdapter<CharSequence> l_start_adapter = ArrayAdapter.createFromResource(this, R.array.find_ride_choices_array, android.R.layout.simple_spinner_item);
+        l_start_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationStart.setAdapter(l_start_adapter);
+
+        locationEnd = (Spinner) findViewById(R.id.location_end_spinner);
+        ArrayAdapter<CharSequence> l_end_adapter = ArrayAdapter.createFromResource(this, R.array.find_ride_choices_array, android.R.layout.simple_spinner_item);
+        l_end_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationEnd.setAdapter(l_end_adapter);
+
+        spinnerEventBinder(); // setup our spinner event listeners/logic
+
         tripService = RetrofitInstance.getRetrofitInstance().create(TripDataService.class); // Instantiate our service
-        
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().toString().equals("Completed")) {
-                    showUpcomingRides(false);
-                }
-                else if (tab.getText().toString().equals("Upcoming")) {
-                    showUpcomingRides(true);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        //Init NavigationView
-        navView = (NavigationView) findViewById(R.id.nav_view);
-        navView.setNavigationItemSelectedListener(this);
 
         // Initialize RecyclerView and setup adapter
         recyclerView = (RecyclerView) findViewById(R.id.rides_container);
         adapter = new TripAdapter(this, shownRideList);
 
-        layoutManager = new LinearLayoutManager(MainActivity.this);
+        //Init NavigationView
+        navView = (NavigationView) findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(this);
+
+        layoutManager = new LinearLayoutManager(FindRideActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         prefs = this.getSharedPreferences("edu.mga.knightrider", Context.MODE_PRIVATE);
 
         if (!(prefs.contains("knight-rider-token") && prefs.contains("knight-rider-userid"))) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(FindRideActivity.this, LoginActivity.class));
         }
         else if (new JWT(prefs.getString("knight-rider-token", null).replace("\"", "")).isExpired(0)) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(FindRideActivity.this, LoginActivity.class));
         }
         else {
             Call<ArrayList<Trip>> call = tripService.getUserTrips("Bearer " + prefs.getString("knight-rider-token",null), prefs.getString("knight-rider-userid", null)); // Fill our request template
@@ -109,7 +106,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 @Override
                 public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FindRideActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -144,7 +141,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FindRideActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -163,42 +160,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
 
         rideList = rides;
-        int tabIndex = tabLayout.getSelectedTabPosition();
-
-        if (tabIndex == 0) {
-            showUpcomingRides(true);
-        } else {
-            showUpcomingRides(false);
-        }
+        shownRideList.clear();
+        shownRideList.addAll(rideList);
+        adapter.notifyDataSetChanged();
     }
 
-
-    private void showUpcomingRides(boolean b) {
-        if (b) {
-            shownRideList.clear();
-
-            for (Trip t:rideList) {
-                if (!t.getCompleted()) {
-                    shownRideList.add(t);
-                }
-            }
-
-            adapter.notifyDataSetChanged();
-        } else {
-            shownRideList.clear();
-
-            for (Trip t:rideList) {
-                if (t.getCompleted()) {
-                    shownRideList.add(t);
-                }
-            }
-
-            adapter.notifyDataSetChanged();
-        }
-    }
 
     public void getMessages(int tripId) {
-        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+        Intent intent = new Intent(FindRideActivity.this, ChatActivity.class);
         intent.putExtra("tripId", tripId);
         startActivity(intent);
     }
@@ -218,16 +187,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code() > 204) {
-                            Toast.makeText(MainActivity.this, "Failed to leave the ride.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FindRideActivity.this, "Failed to leave the ride.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "Successfully left ride.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FindRideActivity.this, "Successfully left ride.", Toast.LENGTH_SHORT).show();
                             refreshData();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to leave the ride.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindRideActivity.this, "Unknown error occurred. Failed to leave the ride.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -245,16 +214,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code() > 204) {
-                            Toast.makeText(MainActivity.this, "Failed to delete the ride.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FindRideActivity.this, "Failed to delete the ride.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(MainActivity.this, "Ride successfully deleted.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FindRideActivity.this, "Ride successfully deleted.", Toast.LENGTH_SHORT).show();
                             refreshData();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Unknown error occurred. Failed to delete the ride.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindRideActivity.this, "Unknown error occurred. Failed to delete the ride.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -263,10 +232,67 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         snackbar.show();
     }
 
+    public void spinnerEventBinder() {
+        locationStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] locations = getResources().getStringArray(R.array.find_ride_choices_array);
+                locationStartValue = locations[i];
+                searchRides(locationStartValue, locationEndValue);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        locationEnd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] locations = getResources().getStringArray(R.array.find_ride_choices_array);
+                locationEndValue = locations[i];
+                searchRides(locationStartValue, locationEndValue);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void searchRides(final String location1, final String location2) {
+        if (location1.isEmpty() || location2.isEmpty()) {
+            Log.d("RIDE_SEARCH", "Empty locations, doing nothing");
+            return;
+        }
+
+        Call<ArrayList<Trip>> call = tripService.getAllTrips("Bearer " + prefs.getString("knight-rider-token",null)); // Fill our request template
+
+        // Make request and setup callback to handle response
+        call.enqueue(new Callback<ArrayList<Trip>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Trip>> call, Response<ArrayList<Trip>> response) {
+                ArrayList<Trip> trips = new ArrayList<>();
+                for (Trip t:response.body()) {
+                    if (t.getOriginCity().equals(location1) && t.getDestCity().equals(location2)) {
+                        trips.add(t);
+                    }
+                }
+                generateTripList(trips);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Trip>> call, Throwable t) {
+                Toast.makeText(FindRideActivity.this, "Unable to load ride information.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     // Override to enable opening sidebar through hamburger menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("MENU2", Integer.toString(item.getItemId()));
         switch(item.getItemId()) {
             case android.R.id.home:
                 super.sidebar.openDrawer(GravityCompat.START);
@@ -279,10 +305,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
         return super.onOptionsItemSelected(item);
-    }
-
-    public void navigateFindRide(View v) {
-        Intent intent = new Intent(MainActivity.this, FindRideActivity.class);
-        startActivity(intent);
     }
 }
