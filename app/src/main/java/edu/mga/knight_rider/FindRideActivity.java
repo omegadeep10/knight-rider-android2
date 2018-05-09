@@ -30,6 +30,7 @@ import java.util.Comparator;
 
 import edu.mga.knight_rider.adapters.TripAdapter;
 import edu.mga.knight_rider.models.Trip;
+import edu.mga.knight_rider.models.requests.JoinTripBody;
 import edu.mga.knight_rider.network.TripDataService;
 import edu.mga.knight_rider.network.RetrofitInstance;
 import okhttp3.ResponseBody;
@@ -190,7 +191,7 @@ public class FindRideActivity extends BaseActivity implements NavigationView.OnN
                             Toast.makeText(FindRideActivity.this, "Failed to leave the ride.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(FindRideActivity.this, "Successfully left ride.", Toast.LENGTH_SHORT).show();
-                            refreshData();
+                            searchRides(locationStartValue, locationEndValue);
                         }
                     }
 
@@ -217,7 +218,7 @@ public class FindRideActivity extends BaseActivity implements NavigationView.OnN
                             Toast.makeText(FindRideActivity.this, "Failed to delete the ride.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(FindRideActivity.this, "Ride successfully deleted.", Toast.LENGTH_SHORT).show();
-                            refreshData();
+                            searchRides(locationStartValue, locationEndValue);
                         }
                     }
 
@@ -230,6 +231,29 @@ public class FindRideActivity extends BaseActivity implements NavigationView.OnN
         });
 
         snackbar.show();
+    }
+
+    public void joinTrip(final int tripId) {
+        int userId = Integer.parseInt(prefs.getString("knight-rider-userid", "9999999999"));
+        JoinTripBody body = new JoinTripBody(userId, tripId, 0.0, 0.0, "INVALID ADDRESS - DEPRECATED FIELD");
+
+        Call<ResponseBody> call = tripService.joinTrip("Bearer " + prefs.getString("knight-rider-token", null), tripId, userId, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(FindRideActivity.this, "Successfully joined trip!", Toast.LENGTH_SHORT).show();
+                    searchRides(locationStartValue, locationEndValue);
+                } else {
+                    Toast.makeText(FindRideActivity.this, "Something went wrong. Try again later.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(FindRideActivity.this, "An unknown error occurred.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void spinnerEventBinder() {

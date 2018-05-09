@@ -24,6 +24,7 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.mga.knight_rider.FindRideActivity;
 import edu.mga.knight_rider.MainActivity;
 import edu.mga.knight_rider.R;
 import edu.mga.knight_rider.models.Passenger;
@@ -153,6 +154,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 if(context instanceof MainActivity){
                     ((MainActivity) context).getMessages(currentTrip.getId());
                 }
+
+                if(context instanceof FindRideActivity){
+                    ((FindRideActivity) context).getMessages(currentTrip.getId());
+                }
             }
         });
 
@@ -173,6 +178,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                     if(context instanceof MainActivity){
                         ((MainActivity) context).deleteTrip(currentTrip.getId());
                     }
+
+                    if(context instanceof FindRideActivity){
+                        ((FindRideActivity) context).deleteTrip(currentTrip.getId());
+                    }
                 }
             });
 
@@ -192,6 +201,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                     public void onClick(View view) {
                         if(context instanceof MainActivity){
                             ((MainActivity) context).editTrip();
+                        }
+
+                        if(context instanceof FindRideActivity){
+                            ((FindRideActivity) context).editTrip();
                         }
                     }
                 });
@@ -222,6 +235,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                         if(context instanceof MainActivity){
                             ((MainActivity) context).leaveTrip(currentTrip.getId());
                         }
+
+                        if (context instanceof FindRideActivity) {
+                            ((FindRideActivity) context).leaveTrip(currentTrip.getId());
+                        }
                     }
                 });
 
@@ -230,23 +247,23 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
             if (!isPassenger) {
                 // SHOW JOIN
-                TextView leave = new TextView(context);
-                leave.setText("JOIN");
-                leave.setTextSize(12);
-                leave.setTextColor(Color.parseColor("#A9A9A9"));
-                leave.setTypeface(null, Typeface.BOLD);
-                leave.setLayoutParams(params);
-                leave.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
-                leave.setOnClickListener(new View.OnClickListener() {
+                TextView join = new TextView(context);
+                join.setText("JOIN");
+                join.setTextSize(12);
+                join.setTextColor(Color.parseColor("#A9A9A9"));
+                join.setTypeface(null, Typeface.BOLD);
+                join.setLayoutParams(params);
+                join.setPadding(0, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics()), 0);
+                join.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(context instanceof MainActivity){
-                            ((MainActivity) context).leaveTrip(currentTrip.getId());
+                        if(context instanceof FindRideActivity){
+                            ((FindRideActivity) context).joinTrip(currentTrip.getId());
                         }
                     }
                 });
 
-                holder.actionsWrapper.addView(leave);
+                holder.actionsWrapper.addView(join);
             }
         }
     }
