@@ -69,6 +69,12 @@ public class BaseActivity extends AppCompatActivity {
                 intent = new Intent(BaseActivity.this, FindRideActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.nav_logout:
+                intent = new Intent(BaseActivity.this, LoginActivity.class);
+                prefs.edit().clear().commit();
+                startActivity(intent);
+                finish();
+                return true;
             default:
                 Toast.makeText(this, "Ooops, not implemented yet.", Toast.LENGTH_SHORT).show();
                 return true;
